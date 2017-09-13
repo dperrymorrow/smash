@@ -5,35 +5,28 @@ export default {
   namespaced: true,
   state: {
     currentUser: null,
+    currentUserId: null,
     errors: [],
   },
 
   mutations: {
-    setCurrentUser(state, user) {
-      state.currentUser = user;
-    },
-    addError(state, error) {
-      state.errors.push(error);
-    },
-    clearErrors(state) {
-      state.errors = [];
-    },
+    setCurrentUserId: (state, userId) => (state.currentUserId = userId),
+    setCurrentUser: (state, user) => (state.currentUser = user),
+    addError: (state, error) => state.errors.push(error),
+    clearErrors: state => (state.errors = []),
   },
 
   actions: {
     signIn(context, payload) {
       context.commit("clearErrors");
+
       return firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then(res => {
           const user = firebase.auth().currentUser;
-          context.commit("setCurrentUser", user);
-
-          firebase.database().ref("users/" + user.uid).set({
-            email: user.email,
-            cards: { knight: 0 },
-          });
+          context.commit("setCurrentUserId", user.uid);
+          // will need to retrieve user here from firebase
         })
         .catch(err => {
           context.commit("addError", err.message);
@@ -58,9 +51,14 @@ export default {
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
         .then(res => {
-          context.commit("setCurrentUser", firebase.auth().currentUser);
+          const auth = firebase.auth().currentUser;
+          const userRecord = { email: auth.email };
+          context.commit("setCurrentUserId", auth.uid);
+          context.commit("setCurrentUser", userRecord);
+          return firebase.database().ref("users/" + auth.uid).set(userRecord);
         })
         .catch(err => {
+          console.error(err);
           context.commit("addError", err.message);
         });
     },

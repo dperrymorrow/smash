@@ -8,9 +8,7 @@
 
 <script>
 export default {
-  created() {
-    this.$store.dispatch("cards/getAll");
-  },
+  created() {},
 
   methods: {
     signOut() {

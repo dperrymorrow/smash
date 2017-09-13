@@ -25,4 +25,5 @@ firebase.auth().onAuthStateChanged(user => {
   }
 });
 
+store.dispatch("cards/getAll");
 export default store;

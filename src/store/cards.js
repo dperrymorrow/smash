@@ -5,7 +5,7 @@ const module = {
   namespaced: true,
 
   state: {
-    all: [],
+    all: null,
   },
 
   mutations: {
@@ -14,7 +14,26 @@ const module = {
     },
   },
 
+  getters: {
+    freeCards(state) {
+      const ret = {};
+      Object.keys(state.all).forEach(key => {
+        if (state.all[key].level_1.cost === 0) ret[key] = 1;
+      });
+      return ret;
+    },
+  },
+
   actions: {
+    assignDefaultCards(context) {
+      return firebase
+        .database()
+        .ref("users/" + context.rootState.users.currentUserId)
+        .update({
+          cards: context.getters.freeCards,
+        })
+        .catch(console.error);
+    },
     getAll(context) {
       return firebase
         .database()

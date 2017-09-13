@@ -53,7 +53,9 @@ export default {
       this.$store.dispatch("users/signIn", this.existingUser);
     },
     create() {
-      this.$store.dispatch("users/create", this.newUser);
+      this.$store.dispatch("users/create", this.newUser).then(res => {
+        this.$store.dispatch("cards/assignDefaultCards");
+      });
     },
   },
 };
