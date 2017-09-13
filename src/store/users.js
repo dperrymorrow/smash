@@ -16,6 +16,18 @@ export default {
     clearErrors: state => (state.errors = []),
   },
 
+  getters: {
+    cards(state, getters, rootState) {
+      const ret = {};
+      Object.keys(state.currentUser.cards).forEach(key => {
+        const level = state.currentUser.cards[key];
+        ret[key] = rootState.cards.all[key][`level_${level}`];
+        ret[key].level = level;
+      });
+      return ret;
+    },
+  },
+
   actions: {
     signIn(context, payload) {
       context.commit("clearErrors");

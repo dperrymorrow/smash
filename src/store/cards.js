@@ -15,6 +15,10 @@ const module = {
   },
 
   getters: {
+    fetchedCards(state) {
+      return Object.keys(state.all).length > 0;
+    },
+
     freeCards(state) {
       const ret = {};
       Object.keys(state.all).forEach(key => {
@@ -34,7 +38,9 @@ const module = {
         })
         .catch(console.error);
     },
+
     getAll(context) {
+      if (context.getters.fetchedCards) return Promise.resolve(context.state.all);
       return firebase
         .database()
         .ref("/cards")
