@@ -1,0 +1,44 @@
+{
+  "users": {
+    "placeholderId": "value"
+  },
+  "games": {},
+  "cards": {
+    "knight": {
+      "level_1": {
+        "cost": 0,
+        "damage": 2,
+        "defense": 3,
+        "health": 100
+      },
+      "level_2": {
+        "cost": 25,
+        "damage": 2.5,
+        "defense": 4.5,
+        "health": 220
+      }
+    },
+    "archer": {
+      "level_1": {
+        "cost": 0,
+        "damage": 2,
+        "defense": 3,
+        "health": 100
+      },
+      "level_2": {
+        "cost": 25,
+        "damage": 2.3,
+        "defense": 3.2,
+        "health": 110
+      }
+    },
+    "ghost": {
+      "level_1": {
+        "cost": 100,
+        "damage": 4,
+        "defense": 0,
+        "health": 80
+      }
+    }
+  }
+}

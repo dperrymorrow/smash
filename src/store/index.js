@@ -1,14 +1,19 @@
 import Vue from "vue";
 import Vuex from "vuex";
 import users from "./users";
+import games from "./games";
+import cards from "./cards";
 import init from "./firebaseConnect";
-Vue.use(Vuex);
+
 const firebase = init();
+Vue.use(Vuex);
 
 const store = new Vuex.Store({
   state: {},
   modules: {
     users,
+    cards,
+    games,
   },
 });
 

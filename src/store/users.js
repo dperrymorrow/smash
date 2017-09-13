@@ -27,7 +27,13 @@ export default {
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
         .then(res => {
-          context.commit("setCurrentUser", firebase.auth().currentUser);
+          const user = firebase.auth().currentUser;
+          context.commit("setCurrentUser", user);
+
+          firebase.database().ref("users/" + user.uid).set({
+            email: user.email,
+            cards: { knight: 0 },
+          });
         })
         .catch(err => {
           context.commit("addError", err.message);
