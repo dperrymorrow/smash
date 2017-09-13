@@ -5,7 +5,7 @@ const module = {
   namespaced: true,
 
   state: {
-    all: null,
+    all: {},
   },
 
   mutations: {

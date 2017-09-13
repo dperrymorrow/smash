@@ -23,26 +23,13 @@ export default {
       return firebase
         .auth()
         .signInWithEmailAndPassword(payload.email, payload.password)
-        .then(res => {
-          const user = firebase.auth().currentUser;
-          context.commit("setCurrentUserId", user.uid);
-          // will need to retrieve user here from firebase
-        })
         .catch(err => {
           context.commit("addError", err.message);
         });
     },
 
     signOut(context, payload) {
-      return firebase
-        .auth()
-        .signOut()
-        .then(() => {
-          context.commit("setCurrentUser", null);
-        })
-        .catch(err => {
-          context.commit("addError", err.message);
-        });
+      return firebase.auth().signOut().catch(console.error);
     },
 
     create(context, payload) {
@@ -50,13 +37,6 @@ export default {
       return firebase
         .auth()
         .createUserWithEmailAndPassword(payload.email, payload.password)
-        .then(res => {
-          const auth = firebase.auth().currentUser;
-          const userRecord = { email: auth.email };
-          context.commit("setCurrentUserId", auth.uid);
-          context.commit("setCurrentUser", userRecord);
-          return firebase.database().ref("users/" + auth.uid).set(userRecord);
-        })
         .catch(err => {
           console.error(err);
           context.commit("addError", err.message);

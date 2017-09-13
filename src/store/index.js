@@ -19,11 +19,33 @@ const store = new Vuex.Store({
 
 firebase.auth().onAuthStateChanged(user => {
   if (user) {
-    store.commit("users/setCurrentUser", user);
+    store.commit("users/setCurrentUserId", user.uid);
+
+    firebase.database().ref("users/" + user.uid).on("value", snapshot => {
+      if (!snapshot.val()) {
+        _createUserRecord(user.uid);
+      } else {
+        store.commit("users/setCurrentUser", snapshot.val());
+        _assureUserHasCards();
+      }
+    });
   } else {
     store.commit("users/setCurrentUser", null);
+    store.commit("users/setCurrentUserId", null);
   }
 });
 
-store.dispatch("cards/getAll");
+function _createUserRecord() {
+  firebase.database().ref("users/" + user.uid).set({ email: user.email }).catch(console.error);
+}
+
+function _assureUserHasCards() {
+  // make sure the user has cards
+  if (store.state.users.currentUser.cards === undefined) {
+    store.dispatch("cards/getAll").then(res => {
+      store.dispatch("cards/assignDefaultCards");
+    });
+  }
+}
+
 export default store;
