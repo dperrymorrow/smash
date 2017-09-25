@@ -18,6 +18,7 @@ export default {
 
   getters: {
     cards(state, getters, rootState) {
+      if (!state.currentUser) return null;
       const ret = {};
       Object.keys(state.currentUser.cards).forEach(key => {
         const level = state.currentUser.cards[key];
